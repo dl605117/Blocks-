@@ -59,19 +59,19 @@ public:
 	}
 	void PutPixel( int x,int y,Color c );
 	template<typename E>
-	void DrawRect( const Rect<E>& rect,Color color = Colors::Magenta )
+	void DrawRect( const Rect<E>& rect )
 	{
 		for( int i = rect.left; i < rect.right; i++ )
 		{
 			for( int j = rect.top; j < rect.bottom; j++ )
 			{
-				PutPixel( i,j,color );
+				PutPixel( i,j,rect.color );
 			}
 		}
 	}
 	void DrawRect( const Vei2& topLeft,const Vei2& bottomRight,Color color = Colors::Magenta )
 	{
-		DrawRect( RectI( topLeft,bottomRight ),color );
+		DrawRect( RectI( topLeft,bottomRight,color ) );
 	}
 	void DrawRect( const Vei2& topLeft,int width,int height,Color color = Colors::Magenta )
 	{

@@ -36,6 +36,14 @@ public:
 	{
 		return *this * scalar;
 	}
+	Vec2_ operator/( T scalar ) const
+	{
+		return Vec2_( T( x / scalar ),T( y / scalar ) );
+	}
+	Vec2_& operator/=( T scalar )
+	{
+		return *this / scalar;
+	}
 	T GetLengthSq() const
 	{
 		return x * x + y * y;
