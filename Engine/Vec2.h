@@ -53,7 +53,7 @@ public:
 		const T length = GetLength();
 		return Vec2( x / length,y / length );
 	}
-private:
+public:
 	T x;
 	T y;
 };
