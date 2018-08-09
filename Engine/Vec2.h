@@ -2,37 +2,37 @@
 #include <algorithm>
 
 template <typename T>
-class Vec2
+class Vec2_
 {
 public:
-	Vec2() = default;
-	Vec2( T x,T y )
+	Vec2_() = default;
+	Vec2_( T x,T y )
 		:
 		x( x ),
 		y( y )
 	{
 	}
-	Vec2 operator+( const Vec2& rhs ) const
+	Vec2_ operator+( const Vec2_& rhs ) const
 	{
-		return Vec2( rhs.x + x,rhs.y + rhs.y );
+		return Vec2_( rhs.x + x,rhs.y + rhs.y );
 	}
-	Vec2& operator+=( const Vec2& rhs )
+	Vec2_& operator+=( const Vec2_& rhs )
 	{
 		return *this + rhs;
 	}
-	Vec2 operator-( const Vec2& rhs ) const
+	Vec2_ operator-( const Vec2_& rhs ) const
 	{
-		return Vec2( x - rhs.x,y - rhs.y );
+		return Vec2_( x - rhs.x,y - rhs.y );
 	}
-	Vec2& operator-=( const Vec2& rhs )
+	Vec2_& operator-=( const Vec2_& rhs )
 	{
 		return *this - rhs;
 	}
-	Vec2 operator*( T scalar ) const
+	Vec2_ operator*( T scalar ) const
 	{
-		return Vec2( x * scalar,y * scalar );
+		return Vec2_( x * scalar,y * scalar );
 	}
-	Vec2& operator*=( T scalar )
+	Vec2_& operator*=( T scalar )
 	{
 		return *this * scalar;
 	}
@@ -44,16 +44,18 @@ public:
 	{
 		return std::sqrt( GetLengthSq() );
 	}
-	Vec2& Normalize()
+	Vec2_& Normalize()
 	{
 		return *this->GetNormalized();
 	}
-	Vec2 GetNormalized() const
+	Vec2_ GetNormalized() const
 	{
 		const T length = GetLength();
-		return Vec2( x / length,y / length );
+		return Vec2_( x / length,y / length );
 	}
 public:
 	T x;
 	T y;
 };
+
+typedef Vec2_<int> Vei2;

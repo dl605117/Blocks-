@@ -1,12 +1,12 @@
 #pragma once
 #include "Vec2.h"
 
-template <typename T>
+template<typename T>
 class Rect
 {
 public:
 	Rect() = default;
-	Rect( T left,T right,T top,T bottom )
+	Rect( T left,T top,T right,T bottom )
 		:
 		left( left ),
 		right( right ),
@@ -14,12 +14,12 @@ public:
 		bottom( bottom )
 	{
 	}
-	Rect( const Vec2& topLeft,const Vec2& bottomRight )
+	Rect( const Vei2& topLeft,const Vei2& bottomRight )
 		:
 		Rect( topLeft.x, topLeft.y, bottomRight.x, bottomRight.y )
 	{
 	}
-	Rect( const Vec2& topLeft,T width,T height )
+	Rect( const Vei2& topLeft,T width,T height )
 		:
 		Rect( topLeft.x, topLeft.y, topLeft.x + width, topLeft.y + height )
 	{
@@ -38,3 +38,5 @@ public:
 	T top;
 	T bottom;
 };
+
+typedef Rect<int> RectI;
