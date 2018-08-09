@@ -12,7 +12,8 @@ void Board::PushColumn( Column col )
 	field[0][0].Shift( Vei2( 100 * ( col - 1 ),0 ) );
 	field[1 + col].emplace_back( field[0][0] );
 	field[0].clear();
-	for( RectI& block : field[1 + col] )
+	//field[1 + col].emplace_back( std::move( field[0][0] ) );
+	for( Block& block : field[1 + col] )
 	{
 		block.Shift( Vei2( 0,-50 ) );
 	}
@@ -23,26 +24,26 @@ void Board::SpawnBlock()
 	assert( field[0].size() == 0 );
 	std::uniform_int_distribution<int> colorDist( 0,2 );
 	field[0].emplace_back(
-		RectI( Vei2( Graphics::ScreenWidth - blockWidth,
+		Block( RectI( Vei2( Graphics::ScreenWidth - blockWidth,
 			Graphics::ScreenHeight + 500 - blockHeight ) / 2,
-			blockWidth,blockHeight,
+			blockWidth,blockHeight),
 			blockColors[colorDist( rng ) ] ) );
 }
 
 void Board::Draw( Graphics& gfx )
 {
-	for( std::vector<RectI> col : field )
+	for( std::vector<Block> col : field )
 	{
-		for( RectI block : col )
+		for( Block block : col )
 		{
-			gfx.DrawRect( block );
+			block.Draw( gfx );
 		}
 	}
 }
 
 bool Board::IsOver() const
 {
-	for( std::vector<RectI> col : field )
+	for( std::vector<Block> col : field )
 	{
 		if( col.size() >= maxRows )
 		{

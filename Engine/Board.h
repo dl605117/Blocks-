@@ -4,6 +4,7 @@
 #include <cassert>
 #include <random>
 #include "Graphics.h"
+#include "Block.h"
 
 class Board
 {
@@ -31,5 +32,5 @@ private:
 	static constexpr int nColumns = 3;
 	static constexpr int blockWidth = 70;
 	static constexpr int blockHeight = 30;
-	std::vector<RectI> field[nColumns + 1];
+	std::vector<Block> field[nColumns + 1];
 };
