@@ -42,5 +42,4 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	//k
 }
