@@ -1,4 +1,5 @@
 #include "Board.h"
+#include <algorithm>
 
 Board::Board()
 	:
@@ -8,12 +9,11 @@ Board::Board()
 
 void Board::PushColumn( Column col )
 {
-	assert( field[0].size() == 1 );
-	field[0][0].Shift( Vei2( 100 * ( col - 1 ),0 ) );
-	field[1 + col].emplace_back( field[0][0] );
-	field[0].clear();
-	//field[1 + col].emplace_back( std::move( field[0][0] ) );
-	for( Block& block : field[1 + col] )
+	assert( !IsOver() );
+	assert( choiceBlock != nullptr );
+	choiceBlock->Shift( Vei2( 100 * ( col - 1 ),0 ) );
+	field[col].push_back( *choiceBlock );
+	for( Block& block : field[col] )
 	{
 		block.Shift( Vei2( 0,-50 ) );
 	}
@@ -21,17 +21,20 @@ void Board::PushColumn( Column col )
 
 void Board::SpawnBlock()
 {
-	assert( field[0].size() == 0 );
 	std::uniform_int_distribution<int> colorDist( 0,2 );
-	field[0].emplace_back(
-		Block( RectI( Vei2( Graphics::ScreenWidth - blockWidth,
+	choiceBlock = std::make_unique<Block>(
+		RectI( Vei2( Graphics::ScreenWidth - blockWidth,
 			Graphics::ScreenHeight + 500 - blockHeight ) / 2,
 			blockWidth,blockHeight),
-			blockColors[colorDist( rng ) ] ) );
+			blockColors[colorDist( rng ) ] );
 }
 
 void Board::Draw( Graphics& gfx )
 {
+	if( choiceBlock != nullptr )
+	{
+		choiceBlock->Draw( gfx );
+	}
 	for( std::vector<Block> col : field )
 	{
 		for( Block block : col )
@@ -51,4 +54,35 @@ bool Board::IsOver() const
 		}
 	}
 	return false;
+}
+
+void Board::UpdateCollapse()
+{
+	int minRight = std::min(
+		int( field[0].size() ),
+		int( field[1].size() ) );
+	int minRows = std::min(
+		int(field[2].size()),minRight );
+
+	for( int row = 0; row < minRows; row++ )
+	{
+		const Color matchColor = field[0][field[0].size() - 1 - row].color;
+		if( field[1][field[1].size() - 1 - row].color == matchColor
+			&& field[2][field[2].size() - 1 - row].color == matchColor )
+		{
+			for( std::vector<Block>& col : field )
+			{
+				col.erase( col.end() - 1 - row );
+			}
+			for( std::vector<Block>& col : field )
+			{
+				for( int i = col.size() - 1 - row; i >= 0; i-- )
+				{
+					col[i].Shift( Vei2( 0,50 ) );
+				}
+			}
+			minRows--;
+			row--;
+		}
+	}
 }

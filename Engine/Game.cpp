@@ -66,6 +66,7 @@ void Game::UpdateModel()
 				brd.SpawnBlock();
 				gameOn = true;
 			}
+			brd.UpdateCollapse();
 		}
 	}
 }
@@ -73,4 +74,8 @@ void Game::UpdateModel()
 void Game::ComposeFrame()
 {
 	brd.Draw( gfx );
+	if( brd.IsOver() )
+	{
+		gfx.DrawRect( RectI( 100,100,200,200 ),Colors::Magenta );
+	}
 }

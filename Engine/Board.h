@@ -5,6 +5,7 @@
 #include <random>
 #include "Graphics.h"
 #include "Block.h"
+#include "Colors.h"
 
 class Board
 {
@@ -21,16 +22,18 @@ public:
 	void SpawnBlock();
 	void Draw( Graphics& gfx );
 	bool IsOver() const;
+	void UpdateCollapse();
 private:
 	std::mt19937 rng;
 	static constexpr Color blockColors[3] = {
-		Colors::Green,
 		Colors::Red,
-		Colors::Cyan
+		Colors::Green,
+		Colors::Blue
 	};
 	static constexpr int maxRows = 7;
 	static constexpr int nColumns = 3;
 	static constexpr int blockWidth = 70;
 	static constexpr int blockHeight = 30;
-	std::vector<Block> field[nColumns + 1];
+	std::vector<Block> field[nColumns];
+	std::unique_ptr<Block> choiceBlock;
 };
