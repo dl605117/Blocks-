@@ -5,10 +5,10 @@
 class Block
 {
 public:
-	Block( const RectI& block,Color color );
+	Block( const RectF& block,Color color );
 	void Draw( Graphics& gfx );
-	void Shift( const Vei2& delta_loc );
+	void LinearShift( const Vec2& delta_loc );
 public:
-	RectI block;
+	RectF block;
 	Color color;
 };

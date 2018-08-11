@@ -67,3 +67,4 @@ public:
 };
 
 typedef Vec2_<int> Vei2;
+typedef Vec2_<float> Vec2;

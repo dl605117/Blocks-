@@ -38,7 +38,8 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	while( !wnd.kbd.KeyIsEmpty() && !brd.IsOver() )
+	const float dt = ft.Mark();
+	while( !wnd.kbd.KeyIsEmpty() && !brd.IsOver() && !brd.IsAnimating() )
 	{
 		const auto e = wnd.kbd.ReadKey();
 		if( e.IsRelease() )
@@ -48,17 +49,14 @@ void Game::UpdateModel()
 				if( e.GetCode() == VK_LEFT )
 				{
 					brd.PushColumn( Board::Column::Left );
-					brd.SpawnBlock();
 				}
 				else if( e.GetCode() == VK_UP )
 				{
 					brd.PushColumn( Board::Column::Middle );
-					brd.SpawnBlock();
 				}
 				else if( e.GetCode() == VK_RIGHT )
 				{
 					brd.PushColumn( Board::Column::Right );
-					brd.SpawnBlock();
 				}
 			}
 			else if ( e.GetCode() == VK_RETURN )
@@ -66,9 +64,9 @@ void Game::UpdateModel()
 				brd.SpawnBlock();
 				gameOn = true;
 			}
-			brd.UpdateCollapse();
 		}
 	}
+	brd.UpdateAnimation( dt );
 }
 
 void Game::ComposeFrame()

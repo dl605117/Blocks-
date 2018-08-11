@@ -15,12 +15,12 @@ public:
 		bottom( bottom )
 	{
 	}
-	Rect( const Vei2& topLeft,const Vei2& bottomRight )
+	Rect( const Vec2_<T>& topLeft,const Vec2_<T>& bottomRight )
 		:
 		Rect( topLeft.x, topLeft.y, bottomRight.x, bottomRight.y )
 	{
 	}
-	Rect( const Vei2& topLeft,T width,T height )
+	Rect( const Vec2_<T>& topLeft,T width,T height )
 		:
 		Rect( topLeft.x, topLeft.y, topLeft.x + width, topLeft.y + height )
 	{
@@ -41,3 +41,4 @@ public:
 };
 
 typedef Rect<int> RectI;
+typedef Rect<float> RectF;

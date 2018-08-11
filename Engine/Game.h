@@ -25,6 +25,7 @@
 #include "Graphics.h"
 #include "Rect.h"
 #include "Board.h"
+#include "FrameTimer.h"
 
 class Game
 {
@@ -46,5 +47,6 @@ private:
 	/*  User Variables              */
 	/********************************/
 	Board brd;
+	FrameTimer ft;
 	bool gameOn = false;
 };
