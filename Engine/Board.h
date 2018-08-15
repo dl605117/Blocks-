@@ -29,7 +29,7 @@ public:
 	Board();
 	void PushColumn( Column col );
 	void SpawnBlock();
-	void Draw( Graphics& gfx );
+	void Draw( Graphics& gfx ) const;
 	bool IsOver() const;
 	void UpdateAnimation( float dt );
 	void UpdateBlocks();

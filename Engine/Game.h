@@ -26,6 +26,7 @@
 #include "Rect.h"
 #include "Board.h"
 #include "FrameTimer.h"
+#include "Surface.h"
 
 class Game
 {
@@ -49,4 +50,5 @@ private:
 	Board brd;
 	FrameTimer ft;
 	bool gameOn = false;
+	Surface tester;
 };

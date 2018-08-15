@@ -24,7 +24,8 @@
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd )
+	gfx( wnd ),
+	tester( "Images\\text.bmp" )
 {
 }
 
@@ -76,4 +77,5 @@ void Game::ComposeFrame()
 	{
 		gfx.DrawRect( RectI( 100,100,200,200 ),Colors::Magenta );
 	}
+	gfx.DrawSurface( 100,100,tester );
 }

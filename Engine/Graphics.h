@@ -25,6 +25,7 @@
 #include "ChiliException.h"
 #include "Colors.h"
 #include "Rect.h"
+#include "Surface.h"
 
 class Graphics
 {
@@ -61,9 +62,9 @@ public:
 	template<typename E>
 	void DrawRect( const Rect<E>& rect,Color color )
 	{
-		for( int i = rect.left; i < rect.right; i++ )
+		for( int i = (int)rect.left; i < (int)rect.right; i++ )
 		{
-			for( int j = rect.top; j < rect.bottom; j++ )
+			for( int j = (int)rect.top; j < (int)rect.bottom; j++ )
 			{
 				PutPixel( i,j,color );
 			}
@@ -77,6 +78,7 @@ public:
 	{
 		DrawRect( topLeft,Vei2( topLeft.x + width,topLeft.y + height ),color );
 	}
+	void DrawSurface( int x,int y,const Surface& surf );
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

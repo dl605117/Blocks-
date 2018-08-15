@@ -316,6 +316,17 @@ void Graphics::PutPixel( int x,int y,Color c )
 	pSysBuffer[Graphics::ScreenWidth * y + x] = c;
 }
 
+void Graphics::DrawSurface( int x,int y,const Surface& surf )
+{
+	for( int y = 0; y < surf.GetHeight(); y++ )
+	{
+		for( int x = 0; x < surf.GetWidth(); x++ )
+		{
+			PutPixel( x,y,surf.GetPixel( x,y ) );
+		}
+	}
+}
+
 //////////////////////////////////////////////////
 //           Graphics Exception
 Graphics::Exception::Exception( HRESULT hr,const std::wstring& note,const wchar_t* file,unsigned int line )

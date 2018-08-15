@@ -28,7 +28,7 @@ void Board::SpawnBlock()
 			blockColors[colorDist( rng ) ] );
 }
 
-void Board::Draw( Graphics& gfx )
+void Board::Draw( Graphics& gfx ) const
 {
 	if( choiceBlock != nullptr )
 	{
@@ -108,16 +108,20 @@ bool Board::IsAnimating() const
 void Board::PushAnimation( float dt )
 {
 	assert( animation == Animations::PushColumn );
-	if( currentDisplacement > 50.0f )
+	if( currentDisplacement >= 50.0f )
 	{
 		animation = Animations::NotAnimating;
-		currentDisplacement = 0;
+		currentDisplacement = 0.0f;
 		UpdateBlocks();
 	}
 	else
 	{
-		const auto movement = Vec2( 0.0f,-1.0f ) * animationSpeed * dt;
+		auto movement = Vec2( 0.0f,-1.0f ) * animationSpeed * dt;
 		currentDisplacement += std::abs( movement.y );
+		if( currentDisplacement > 50.0f )
+		{
+			movement += Vec2( 0.0f,currentDisplacement - 50.0f );
+		}
 		for( Block& block : field[(int) currentColPush] )
 		{
 			block.LinearShift( movement );
@@ -128,17 +132,21 @@ void Board::PushAnimation( float dt )
 void Board::CollapseAnimation( float dt )
 {
 	assert( animation == Animations::CollapseRow );
-	if( currentDisplacement > 50.0f )
+	if( currentDisplacement >= 50.0f )
 	{
 		animation = Animations::NotAnimating;
-		currentDisplacement = 0;
+		currentDisplacement = 0.0f;
 		SpawnBlock();
 		rowsToDelete.clear();
 	}
 	else
 	{
-		const auto movement = Vec2( 0.0f,1.0f ) * animationSpeed * dt;
+		auto movement = Vec2( 0.0f,1.0f ) * animationSpeed * dt;
 		currentDisplacement += std::abs( movement.y );
+		if( currentDisplacement > 50.0f )
+		{
+			movement += Vec2( 0.0f,-( currentDisplacement - 50.0f ) );
+		}
 		for( std::vector<Block>& col : field )
 		{
 			auto tempRowsToDelete = rowsToDelete;
