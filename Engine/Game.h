@@ -25,6 +25,7 @@
 #include "Graphics.h"
 #include "Rect.h"
 #include "Board.h"
+#include "BoardUI.h"
 #include "FrameTimer.h"
 #include "Surface.h"
 
@@ -48,6 +49,7 @@ private:
 	/*  User Variables              */
 	/********************************/
 	Board brd;
+	BoardUI brdUI;
 	FrameTimer ft;
 	bool gameOn = false;
 };

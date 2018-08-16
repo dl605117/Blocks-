@@ -1,12 +1,34 @@
 #include "Board.h"
 #include <algorithm>
-#include "SpriteEffects.h"
 
-Board::Board( const std::string& textFileName )
+Board::Board()
 	:
-	rng( std::random_device()() ),
-	text( textFileName )
+	rng( std::random_device()() )
 {
+}
+
+Board::Board( const Board& brd )
+	:
+	score( brd.score )
+{
+	delete[] pPointSystem;
+	pPointSystem = brd.pPointSystem;
+}
+
+Board::~Board()
+{
+	delete[] pPointSystem;
+	pPointSystem = nullptr;
+}
+
+Board& Board::operator=( const Board brd )
+{
+	score = brd.score;
+
+	delete[] pPointSystem;
+	pPointSystem = brd.pPointSystem;
+
+	return *this;
 }
 
 void Board::PushColumn( Column col )
@@ -42,12 +64,6 @@ void Board::Draw( Graphics& gfx ) const
 		{
 			block.Draw( gfx );
 		}
-	}
-	int place = 0;
-	for( char digit : std::to_string( score ) )
-	{
-		gfx.DrawSprite( 17 * place,0,text,GetNumberRect( digit ),SpriteEffects::Substitute( Colors::White,Colors::Yellow ) );
-		place++;
 	}
 }
 
@@ -219,9 +235,7 @@ void Board::EraseAnimation( float dt )
 	}
 }
 
-RectI Board::GetNumberRect( char digit ) const
+int Board::GetScore() const
 {
-	Vei2 topLeft( ( digit - ' ' ) * 16,0 );
-	return RectI( topLeft,topLeft + Vei2( 17,14 ) );
+	return score;
 }
-

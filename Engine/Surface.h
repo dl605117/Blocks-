@@ -7,6 +7,9 @@ class Surface
 {
 public:
 	Surface( const std::string& filename );
+	Surface( const Surface& surf );
+	~Surface();
+	Surface& operator=( const Surface& surf );
 	void PutPixel( int x,int y,Color color );
 	Color& GetPixel( int x,int y ) const;
 	int GetWidth() const;

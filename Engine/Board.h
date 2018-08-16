@@ -27,7 +27,10 @@ public:
 		EraseRow
 	};
 public:
-	Board( const std::string& textFileName );
+	Board();
+	Board( const Board& brd );
+	~Board();
+	Board& operator=( const Board brd );
 	void PushColumn( Column col );
 	void SpawnBlock();
 	void Draw( Graphics& gfx ) const;
@@ -35,11 +38,11 @@ public:
 	void UpdateAnimation( float dt );
 	void UpdateBlocks();
 	bool IsAnimating() const;
+	int GetScore() const;
 private:
 	void PushAnimation( float dt );
 	void CollapseAnimation( float dt );
 	void EraseAnimation( float dt );
-	RectI GetNumberRect( char digit ) const;
 private:
 	std::mt19937 rng;
 	static constexpr Color blockColors[3] = {
@@ -67,5 +70,4 @@ private:
 		100,
 		300
 	};
-	Surface text;
 };

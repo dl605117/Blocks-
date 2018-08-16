@@ -25,7 +25,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	brd( "Images\\text16x28.bmp" )
+	brdUI( brd,"Images\\text16x28.bmp" )
 {
 }
 
@@ -72,9 +72,13 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	brd.Draw( gfx );
-	if( brd.IsOver() )
+	if( gameOn )
 	{
-		gfx.DrawRect( RectI( 100,100,200,200 ),Colors::Magenta );
+		brd.Draw( gfx );
+		if( brd.IsOver() )
+		{
+			gfx.DrawRect( RectI( 100,100,200,200 ),Colors::Magenta );
+		}
+		brdUI.Draw( gfx );
 	}
 }

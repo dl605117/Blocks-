@@ -59,6 +59,30 @@ Surface::Surface( const std::string & filename )
 	}
 }
 
+Surface::Surface( const Surface& surf )
+	:
+	width( surf.width ),
+	height( surf.height )
+{
+	delete pColor;
+	pColor = surf.pColor;
+}
+
+Surface::~Surface()
+{
+	delete pColor;
+	pColor = nullptr;
+}
+
+Surface& Surface::operator=( const Surface& surf )
+{
+	width = surf.width;
+	height = surf.height;
+	delete pColor;
+	pColor = surf.pColor;
+
+	return *this;
+}
 
 void Surface::PutPixel( int x,int y,Color color )
 {
