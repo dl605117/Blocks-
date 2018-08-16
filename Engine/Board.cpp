@@ -1,5 +1,6 @@
 #include "Board.h"
 #include <algorithm>
+#include "SpriteEffects.h"
 
 Board::Board( const std::string& textFileName )
 	:
@@ -45,7 +46,7 @@ void Board::Draw( Graphics& gfx ) const
 	int place = 0;
 	for( char digit : std::to_string( score ) )
 	{
-		gfx.DrawSprite( 17 * place,0,text,GetNumberRect( digit ) );
+		gfx.DrawSprite( 17 * place,0,text,GetNumberRect( digit ),SpriteEffects::Substitute( Colors::White,Colors::Yellow ) );
 		place++;
 	}
 }

@@ -26,6 +26,7 @@
 #include "Colors.h"
 #include "Rect.h"
 #include "Surface.h"
+#include <cassert>
 
 class Graphics
 {
@@ -78,8 +79,31 @@ public:
 	{
 		DrawRect( topLeft,Vei2( topLeft.x + width,topLeft.y + height ),color );
 	}
-	void DrawSprite( int x,int y,const Surface& surf );
-	void DrawSprite( int x,int y,const Surface& surf,const RectI& srcRect );
+	template<typename E>
+	void DrawSprite( int x,int y,const Surface& surf,E effect )
+	{
+		DrawSprite( x,y,surf,RectI( 0,0,surf.GetWidth(),surf.GetHeight() ),effect );
+	}
+	template<typename E>
+	void DrawSprite( int x,int y,const Surface& surf,const RectI& srcRect,E effect )
+	{
+		assert( srcRect.left >= 0 );
+		assert( srcRect.right <= surf.GetWidth() );
+		assert( srcRect.top >= 0 );
+		assert( srcRect.bottom <= surf.GetHeight() );
+
+		for( int sy = srcRect.top; sy < srcRect.bottom; sy++ )
+		{
+			for( int sx = srcRect.left; sx < srcRect.right; sx++ )
+			{
+				effect( surf.GetPixel( sx,sy ),
+					x + sx - srcRect.left,
+					y + sy - srcRect.top,
+					*this
+				);
+			}
+		}
+	}
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

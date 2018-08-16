@@ -51,6 +51,10 @@ public:
 		dword = color.dword;
 		return *this;
 	}
+	bool operator !=( Color color ) const
+	{
+		return dword != color.dword;
+	}
 	bool operator==( const Color color ) const
 	{
 		return dword == color.dword;

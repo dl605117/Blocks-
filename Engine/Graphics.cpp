@@ -316,27 +316,6 @@ void Graphics::PutPixel( int x,int y,Color c )
 	pSysBuffer[Graphics::ScreenWidth * y + x] = c;
 }
 
-void Graphics::DrawSprite( int x,int y,const Surface& surf )
-{
-	DrawSprite( x,y,surf,RectI( 0,0,surf.GetWidth(),surf.GetHeight() ) );
-}
-
-void Graphics::DrawSprite( int x,int y,const Surface& surf,const RectI& srcRect )
-{
-	assert( srcRect.left >= 0 );
-	assert( srcRect.right <= surf.GetWidth() );
-	assert( srcRect.top >= 0 );
-	assert( srcRect.bottom <= surf.GetHeight() );
-
-	for( int sy = srcRect.top; sy < srcRect.bottom; sy++ )
-	{
-		for( int sx = srcRect.left; sx < srcRect.right; sx++ )
-		{
-			PutPixel( x + sx - srcRect.left,y + sy - srcRect.top,surf.GetPixel( sx,sy ) );
-		}
-	}
-}
-
 //////////////////////////////////////////////////
 //           Graphics Exception
 Graphics::Exception::Exception( HRESULT hr,const std::wstring& note,const wchar_t* file,unsigned int line )
