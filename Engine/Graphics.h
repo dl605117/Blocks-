@@ -104,6 +104,29 @@ public:
 			}
 		}
 	}
+	void DrawCircle( const Vei2& topLeft,int radius,Color c )
+	{
+		DrawCircle( topLeft,radius,c,0.0f,float(std::acos( -1 ) * 2 ) );
+	}
+	void DrawCircle( const Vei2& topLeft,int radius,Color c,float beginDeg,float endDeg )
+	{
+		const Vei2 center = topLeft + Vei2( radius,radius );
+		const Vei2 zeroDegrees = Vei2( 0,radius );
+		const int radiusSq = radius * radius;
+		const double twoPi = std::acos( -1 );
+		for( int dy = -radius; dy < radius; dy++ )
+		{
+			for( int dx = -radius; dx < radius; dx++ )
+			{
+				double angle = zeroDegrees.GetAngle( Vei2( dx,dy ) );
+				angle += angle < 0 ? twoPi : 0;
+				if( angle <= endDeg && angle >= beginDeg && dy * dy + dx * dx < radiusSq )
+				{
+					PutPixel( center.x - dx,center.y - dy,c );
+				}
+			}
+		}
+	}
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

@@ -20,6 +20,7 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include <math.h>
 
 Game::Game( MainWindow& wnd )
 	:
@@ -81,4 +82,7 @@ void Game::ComposeFrame()
 		}
 		brdUI.Draw( gfx );
 	}
+	const double pi = std::acos( -1 );
+	gfx.DrawCircle( Vei2( 100,100 ),100,Colors::Yellow,0.0f,5.0f);
+	gfx.DrawCircle( Vei2( 100,100 ),100,Colors::Blue );
 }

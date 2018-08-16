@@ -44,13 +44,17 @@ public:
 	{
 		return *this = *this / scalar;
 	}
+	T operator*( const Vec2_& rhs ) const
+	{
+		return x * rhs.x + y * rhs.y;
+	}
 	T GetLengthSq() const
 	{
 		return x * x + y * y;
 	}
-	T GetLength() const
+	double GetLength() const
 	{
-		return std::sqrt( GetLengthSq() );
+		return (double)std::sqrt( GetLengthSq() );
 	}
 	Vec2_& Normalize()
 	{
@@ -60,6 +64,14 @@ public:
 	{
 		const T length = GetLength();
 		return Vec2_( x / length,y / length );
+	}
+	T GetDeterminant( const Vec2_& rhs ) const
+	{
+		return x * rhs.y - rhs.x * y;
+	}
+	double GetAngle( const Vec2_& rhs ) const
+	{
+		return std::atan2( GetDeterminant( rhs ),*this * rhs );
 	}
 public:
 	T x;

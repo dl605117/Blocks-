@@ -8,12 +8,12 @@ BoardUI::BoardUI( Board& brd,const std::string& textFileName )
 }
 
 
-void BoardUI::Draw( Graphics& gfx )
+void BoardUI::Draw( Graphics& gfx ) const
 {
 	DrawScore( gfx );
 }
 
-void BoardUI::DrawScore( Graphics& gfx )
+void BoardUI::DrawScore( Graphics& gfx ) const
 {
 	int place = 0;
 	for( char digit : std::to_string( brd->GetScore() ) )
@@ -27,4 +27,9 @@ RectI BoardUI::GetNumberRect( char digit ) const
 {
 	Vei2 topLeft( ( digit - ' ' ) * 16,0 );
 	return RectI( topLeft,topLeft + Vei2( 17,14 ) );
+}
+
+void BoardUI::DrawTimer( Graphics& gfx )
+{
+	
 }
