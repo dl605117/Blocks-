@@ -78,7 +78,8 @@ public:
 	{
 		DrawRect( topLeft,Vei2( topLeft.x + width,topLeft.y + height ),color );
 	}
-	void DrawSurface( int x,int y,const Surface& surf );
+	void DrawSprite( int x,int y,const Surface& surf );
+	void DrawSprite( int x,int y,const Surface& surf,const RectI& srcRect );
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

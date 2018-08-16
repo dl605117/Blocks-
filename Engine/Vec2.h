@@ -18,7 +18,7 @@ public:
 	}
 	Vec2_& operator+=( const Vec2_& rhs )
 	{
-		return *this + rhs;
+		return *this = *this + rhs;
 	}
 	Vec2_ operator-( const Vec2_& rhs ) const
 	{
@@ -26,7 +26,7 @@ public:
 	}
 	Vec2_& operator-=( const Vec2_& rhs )
 	{
-		return *this - rhs;
+		return *this = *this - rhs;
 	}
 	Vec2_ operator*( T scalar ) const
 	{
@@ -34,7 +34,7 @@ public:
 	}
 	Vec2_& operator*=( T scalar )
 	{
-		return *this * scalar;
+		return *this = *this * scalar;
 	}
 	Vec2_ operator/( T scalar ) const
 	{
@@ -42,7 +42,7 @@ public:
 	}
 	Vec2_& operator/=( T scalar )
 	{
-		return *this / scalar;
+		return *this = *this / scalar;
 	}
 	T GetLengthSq() const
 	{
@@ -54,7 +54,7 @@ public:
 	}
 	Vec2_& Normalize()
 	{
-		return *this->GetNormalized();
+		return *this = *this->GetNormalized();
 	}
 	Vec2_ GetNormalized() const
 	{

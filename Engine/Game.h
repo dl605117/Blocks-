@@ -50,5 +50,4 @@ private:
 	Board brd;
 	FrameTimer ft;
 	bool gameOn = false;
-	Surface tester;
 };

@@ -7,6 +7,7 @@
 #include "Block.h"
 #include "Colors.h"
 #include "FrameTimer.h"
+#include "Surface.h"
 
 class Board
 {
@@ -26,7 +27,7 @@ public:
 		EraseRow
 	};
 public:
-	Board();
+	Board( const std::string& textFileName );
 	void PushColumn( Column col );
 	void SpawnBlock();
 	void Draw( Graphics& gfx ) const;
@@ -48,7 +49,7 @@ private:
 	static constexpr int nColumns = 3;
 	static constexpr int blockWidth = 70;
 	static constexpr int blockHeight = 30;
-	static constexpr int animationSpeed = 200;
+	static constexpr int animationSpeed = 600;
 	static constexpr float animationEraseTimer = 0.5f;
 	std::vector<Block> field[nColumns];
 	std::unique_ptr<Block> choiceBlock;
@@ -56,4 +57,6 @@ private:
 	float currentDisplacement = 0.0f;
 	Column currentColPush = Column::Left;
 	std::vector<int> rowsToDelete;
+	int score = 0;
+	Surface text;
 };

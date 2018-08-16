@@ -1,9 +1,10 @@
 #include "Board.h"
 #include <algorithm>
 
-Board::Board()
+Board::Board( const std::string& textFileName )
 	:
-	rng( std::random_device()() )
+	rng( std::random_device()() ),
+	text( textFileName )
 {
 }
 
@@ -23,7 +24,7 @@ void Board::SpawnBlock()
 	std::uniform_int_distribution<int> colorDist( 0,2 );
 	choiceBlock = std::make_unique<Block>(
 		RectF( Vec2( Graphics::ScreenWidth - blockWidth,
-			Graphics::ScreenHeight + 500 - blockHeight ) / 2,
+			Graphics::ScreenHeight + 500.0f - blockHeight ) / 2,
 			blockWidth,blockHeight),
 			blockColors[colorDist( rng ) ] );
 }
@@ -111,19 +112,16 @@ void Board::PushAnimation( float dt )
 	if( currentDisplacement >= 50.0f )
 	{
 		animation = Animations::NotAnimating;
-		if( currentDisplacement > 50.0f )
-		{
-			for( Block& block : field[(int) currentColPush] )
-			{
-				block.LinearShift( Vec2( 0.0f,currentDisplacement - 50.0f ) );
-			}
-		}
 		currentDisplacement = 0.0f;
 		UpdateBlocks();
 	}
 	else
 	{
 		auto movement = Vec2( 0.0f,-1.0f ) * animationSpeed * dt;
+		if( currentDisplacement + std::abs( movement.y ) > 50.0f )
+		{
+			movement = Vec2( 0.0f, currentDisplacement - 50.0f );
+		}
 		currentDisplacement += std::abs( movement.y );
 		for( Block& block : field[(int) currentColPush] )
 		{
@@ -138,13 +136,7 @@ void Board::CollapseAnimation( float dt )
 	if( currentDisplacement >= 50.0f )
 	{
 		animation = Animations::NotAnimating;
-		if( currentDisplacement > 50.0f )
-		{
-			for( Block& block : field[(int) currentColPush] )
-			{
-				block.LinearShift( Vec2( 0.0f,-( currentDisplacement - 50.0f ) ) );
-			}
-		}
+		
 		currentDisplacement = 0.0f;
 		SpawnBlock();
 		rowsToDelete.clear();
@@ -152,6 +144,10 @@ void Board::CollapseAnimation( float dt )
 	else
 	{
 		auto movement = Vec2( 0.0f,1.0f ) * animationSpeed * dt;
+		if( currentDisplacement + std::abs( movement.y ) > 50.0f )
+		{
+			movement = Vec2( 0.0f,50.0f - currentDisplacement );
+		}
 		currentDisplacement += std::abs( movement.y );
 		for( std::vector<Block>& col : field )
 		{
