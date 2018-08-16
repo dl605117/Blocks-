@@ -25,7 +25,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	brd( "Images\\text.bmp" )
+	brd( "Images\\text16x28.bmp" )
 {
 }
 

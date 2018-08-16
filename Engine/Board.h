@@ -35,9 +35,11 @@ public:
 	void UpdateAnimation( float dt );
 	void UpdateBlocks();
 	bool IsAnimating() const;
+private:
 	void PushAnimation( float dt );
 	void CollapseAnimation( float dt );
 	void EraseAnimation( float dt );
+	RectI GetNumberRect( char digit ) const;
 private:
 	std::mt19937 rng;
 	static constexpr Color blockColors[3] = {
@@ -58,5 +60,12 @@ private:
 	Column currentColPush = Column::Left;
 	std::vector<int> rowsToDelete;
 	int score = 0;
+	int* pPointSystem = new int[5]{
+		1,
+		20,
+		70,
+		100,
+		300
+	};
 	Surface text;
 };

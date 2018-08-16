@@ -332,7 +332,7 @@ void Graphics::DrawSprite( int x,int y,const Surface& surf,const RectI& srcRect 
 	{
 		for( int sx = srcRect.left; sx < srcRect.right; sx++ )
 		{
-			PutPixel( x,y,surf.GetPixel( sx,sy ) );
+			PutPixel( x + sx - srcRect.left,y + sy - srcRect.top,surf.GetPixel( sx,sy ) );
 		}
 	}
 }

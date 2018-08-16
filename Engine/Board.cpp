@@ -42,6 +42,12 @@ void Board::Draw( Graphics& gfx ) const
 			block.Draw( gfx );
 		}
 	}
+	int place = 0;
+	for( char digit : std::to_string( score ) )
+	{
+		gfx.DrawSprite( 17 * place,0,text,GetNumberRect( digit ) );
+		place++;
+	}
 }
 
 bool Board::IsOver() const
@@ -84,6 +90,7 @@ void Board::UpdateBlocks()
 		int( field[(int) Column::Left].size() ),minRight );
 
 	bool collapsedBlocks = false;
+	int nCollapsedBlocks = 0;
 	for( int row = 1; row < minRows + 1; row++ )
 	{
 		const Color matchColor = field[(int) Column::Left][field[0].size() - row].color;
@@ -93,12 +100,14 @@ void Board::UpdateBlocks()
 			rowsToDelete.emplace_back( row );
 			animation = Animations::EraseRow;
 			collapsedBlocks = true;
+			nCollapsedBlocks++;
 		}
 	}
 	if( !collapsedBlocks )
 	{
 		SpawnBlock();
 	}
+	score += nCollapsedBlocks > 0 ? pPointSystem[nCollapsedBlocks - 1] : 0;
 }
 
 bool Board::IsAnimating() const
@@ -118,11 +127,12 @@ void Board::PushAnimation( float dt )
 	else
 	{
 		auto movement = Vec2( 0.0f,-1.0f ) * animationSpeed * dt;
-		if( currentDisplacement + std::abs( movement.y ) > 50.0f )
+		const auto movementY = std::abs( movement.y );
+		if( currentDisplacement + movementY > 50.0f )
 		{
 			movement = Vec2( 0.0f, currentDisplacement - 50.0f );
 		}
-		currentDisplacement += std::abs( movement.y );
+		currentDisplacement += movementY;
 		for( Block& block : field[(int) currentColPush] )
 		{
 			block.LinearShift( movement );
@@ -144,11 +154,12 @@ void Board::CollapseAnimation( float dt )
 	else
 	{
 		auto movement = Vec2( 0.0f,1.0f ) * animationSpeed * dt;
-		if( currentDisplacement + std::abs( movement.y ) > 50.0f )
+		const auto movementY = std::abs( movement.y );
+		if( currentDisplacement + movementY > 50.0f )
 		{
 			movement = Vec2( 0.0f,50.0f - currentDisplacement );
 		}
-		currentDisplacement += std::abs( movement.y );
+		currentDisplacement += movementY;
 		for( std::vector<Block>& col : field )
 		{
 			auto tempRowsToDelete = rowsToDelete;
@@ -206,3 +217,10 @@ void Board::EraseAnimation( float dt )
 		}
 	}
 }
+
+RectI Board::GetNumberRect( char digit ) const
+{
+	Vei2 topLeft( ( digit - ' ' ) * 16,0 );
+	return RectI( topLeft,topLeft + Vei2( 17,14 ) );
+}
+
