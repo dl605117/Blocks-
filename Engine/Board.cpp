@@ -111,6 +111,13 @@ void Board::PushAnimation( float dt )
 	if( currentDisplacement >= 50.0f )
 	{
 		animation = Animations::NotAnimating;
+		if( currentDisplacement > 50.0f )
+		{
+			for( Block& block : field[(int) currentColPush] )
+			{
+				block.LinearShift( Vec2( 0.0f,currentDisplacement - 50.0f ) );
+			}
+		}
 		currentDisplacement = 0.0f;
 		UpdateBlocks();
 	}
@@ -118,10 +125,6 @@ void Board::PushAnimation( float dt )
 	{
 		auto movement = Vec2( 0.0f,-1.0f ) * animationSpeed * dt;
 		currentDisplacement += std::abs( movement.y );
-		if( currentDisplacement > 50.0f )
-		{
-			movement += Vec2( 0.0f,currentDisplacement - 50.0f );
-		}
 		for( Block& block : field[(int) currentColPush] )
 		{
 			block.LinearShift( movement );
@@ -135,6 +138,13 @@ void Board::CollapseAnimation( float dt )
 	if( currentDisplacement >= 50.0f )
 	{
 		animation = Animations::NotAnimating;
+		if( currentDisplacement > 50.0f )
+		{
+			for( Block& block : field[(int) currentColPush] )
+			{
+				block.LinearShift( Vec2( 0.0f,-( currentDisplacement - 50.0f ) ) );
+			}
+		}
 		currentDisplacement = 0.0f;
 		SpawnBlock();
 		rowsToDelete.clear();
@@ -143,10 +153,6 @@ void Board::CollapseAnimation( float dt )
 	{
 		auto movement = Vec2( 0.0f,1.0f ) * animationSpeed * dt;
 		currentDisplacement += std::abs( movement.y );
-		if( currentDisplacement > 50.0f )
-		{
-			movement += Vec2( 0.0f,-( currentDisplacement - 50.0f ) );
-		}
 		for( std::vector<Block>& col : field )
 		{
 			auto tempRowsToDelete = rowsToDelete;
