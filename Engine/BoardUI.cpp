@@ -11,6 +11,7 @@ BoardUI::BoardUI( Board& brd,const std::string& textFileName )
 void BoardUI::Draw( Graphics& gfx ) const
 {
 	DrawScore( gfx );
+	DrawTimer( gfx );
 }
 
 void BoardUI::DrawScore( Graphics& gfx ) const
@@ -29,7 +30,19 @@ RectI BoardUI::GetNumberRect( char digit ) const
 	return RectI( topLeft,topLeft + Vei2( 17,14 ) );
 }
 
-void BoardUI::DrawTimer( Graphics& gfx )
+void BoardUI::DrawTimer( Graphics& gfx ) const
 {
-	
+	if( brd->IsOver() )
+	{
+		gfx.DrawCircleFromCenter( timerCenterPos,timerOuterRadius,timerColor );
+		gfx.DrawCircleFromCenter( timerCenterPos,timerInnerRadius,Colors::Black );
+	}
+	else
+	{
+		float up = float( twoPi / 4 );
+		float endAngle = float( ( brd->GetTimer() / Board::maxTimer ) * twoPi );
+		endAngle = endAngle < up ? up - endAngle : (float) twoPi - ( endAngle - up );
+		gfx.DrawCircleFromCenter( timerCenterPos,timerOuterRadius,timerColor,endAngle,float( twoPi / 4 ) );
+		gfx.DrawCircleFromCenter( timerCenterPos,timerInnerRadius,Colors::Black,endAngle,float( twoPi / 4 ) );
+	}
 }

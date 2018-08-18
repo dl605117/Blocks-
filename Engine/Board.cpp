@@ -44,6 +44,7 @@ void Board::PushColumn( Column col )
 
 void Board::SpawnBlock()
 {
+	timer = 0.0f;
 	std::uniform_int_distribution<int> colorDist( 0,2 );
 	choiceBlock = std::make_unique<Block>(
 		RectF( Vec2( Graphics::ScreenWidth - blockWidth,
@@ -69,6 +70,10 @@ void Board::Draw( Graphics& gfx ) const
 
 bool Board::IsOver() const
 {
+	if( timer > maxTimer )
+	{
+		return true;
+	}
 	for( std::vector<Block> col : field )
 	{
 		if( col.size() >= maxRows )
@@ -95,6 +100,10 @@ void Board::UpdateAnimation( float dt )
 			EraseAnimation( dt );
 			break;
 		}
+	}
+	else if ( !IsOver() )
+	{
+		timer += dt;
 	}
 }
 
@@ -163,7 +172,6 @@ void Board::CollapseAnimation( float dt )
 	if( currentDisplacement >= 50.0f )
 	{
 		animation = Animations::NotAnimating;
-		
 		currentDisplacement = 0.0f;
 		SpawnBlock();
 		rowsToDelete.clear();
@@ -238,4 +246,9 @@ void Board::EraseAnimation( float dt )
 int Board::GetScore() const
 {
 	return score;
+}
+
+float Board::GetTimer() const
+{
+	return timer;
 }

@@ -104,28 +104,51 @@ public:
 			}
 		}
 	}
-	void DrawCircle( const Vei2& topLeft,int radius,Color c )
+	void DrawCircleFromCenter( const Vei2& center,int radius,Color c )
 	{
-		DrawCircle( topLeft,radius,c,0.0f,float(std::acos( -1 ) * 2 ) );
+		DrawCircleFromCenter( center,radius,c,0.0f,float(std::acos( -1 ) * 2 ) );
 	}
-	void DrawCircle( const Vei2& topLeft,int radius,Color c,float beginDeg,float endDeg )
+	// DrawCircle:
+	// Draws a portion of a circle from starting angle to end angle.
+	// Goes counterclockwise and 0.0f begins from ( 1,0 ) in the 
+	// coord system. Utilizes Radians
+	void DrawCircleFromCenter( const Vei2& center,int radius,Color c,float beginDeg,float endDeg )
 	{
-		const Vei2 center = topLeft + Vei2( radius,radius );
-		const Vei2 zeroDegrees = Vei2( 0,radius );
+		bool opp = false;
+		if( beginDeg > endDeg || beginDeg < 0 )
+		{
+			opp = true;
+		}
+		const Vei2 zeroDegrees = Vei2( radius,0 );
 		const int radiusSq = radius * radius;
-		const double twoPi = std::acos( -1 );
+		const double twoPi = std::acos( -1 ) * 2;
 		for( int dy = -radius; dy < radius; dy++ )
 		{
 			for( int dx = -radius; dx < radius; dx++ )
 			{
-				double angle = zeroDegrees.GetAngle( Vei2( dx,dy ) );
+				double angle = zeroDegrees.GetAngle( Vei2( dx,-dy ) );
 				angle += angle < 0 ? twoPi : 0;
-				if( angle <= endDeg && angle >= beginDeg && dy * dy + dx * dx < radiusSq )
+				if( opp )
 				{
-					PutPixel( center.x - dx,center.y - dy,c );
+					if( ( angle >= beginDeg || angle < endDeg ) && dy * dy + dx * dx <= radiusSq )
+					{
+						PutPixel( center.x + dx,center.y + dy,c );
+					}
+				}
+				else if ( angle < endDeg && angle >= beginDeg && dy * dy + dx * dx <= radiusSq )
+				{
+					PutPixel( center.x + dx,center.y + dy,c );
 				}
 			}
 		}
+	}
+	void DrawCircle( const Vei2& topLeft,int radius,Color c )
+	{
+		DrawCircle( topLeft,radius,c,0.0f,float( std::acos( -1 ) * 2 ) );
+	}
+	void DrawCircle( const Vei2& topLeft,int radius,Color c,float beginDeg,float endDeg )
+	{
+		DrawCircleFromCenter( topLeft + Vei2( radius,radius ),radius,c,beginDeg,endDeg );
 	}
 	~Graphics();
 private:

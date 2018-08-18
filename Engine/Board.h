@@ -39,10 +39,13 @@ public:
 	void UpdateBlocks();
 	bool IsAnimating() const;
 	int GetScore() const;
+	float GetTimer() const;
 private:
 	void PushAnimation( float dt );
 	void CollapseAnimation( float dt );
 	void EraseAnimation( float dt );
+public:
+	static constexpr float maxTimer = 3.0f;
 private:
 	std::mt19937 rng;
 	static constexpr Color blockColors[3] = {
@@ -70,4 +73,5 @@ private:
 		100,
 		300
 	};
+	float timer = 0.0f;
 };

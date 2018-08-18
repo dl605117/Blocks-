@@ -78,11 +78,8 @@ void Game::ComposeFrame()
 		brd.Draw( gfx );
 		if( brd.IsOver() )
 		{
-			gfx.DrawRect( RectI( 100,100,200,200 ),Colors::Magenta );
+			gfx.DrawRect( RectI( 100,100,100,100 ),Colors::Magenta );
 		}
 		brdUI.Draw( gfx );
 	}
-	const double pi = std::acos( -1 );
-	gfx.DrawCircle( Vei2( 100,100 ),100,Colors::Yellow,0.0f,5.0f);
-	gfx.DrawCircle( Vei2( 100,100 ),100,Colors::Blue );
 }
