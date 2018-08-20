@@ -63,12 +63,13 @@ void Game::UpdateModel()
 			}
 			else if ( e.GetCode() == VK_RETURN )
 			{
-				brd.SpawnBlock();
+				brd.InitBoard();
 				gameOn = true;
 			}
 		}
 	}
 	brd.UpdateAnimation( dt );
+	brd.UpdateTimer( dt );
 }
 
 void Game::ComposeFrame()

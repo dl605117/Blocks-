@@ -31,7 +31,7 @@ public:
 	}
 	T GetHeight() const
 	{
-		return bottom - height;
+		return bottom - top;
 	}
 public:
 	T left;

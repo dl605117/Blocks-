@@ -34,15 +34,15 @@ void BoardUI::DrawTimer( Graphics& gfx ) const
 {
 	if( brd->IsOver() )
 	{
-		gfx.DrawCircleFromCenter( timerCenterPos,timerOuterRadius,timerColor );
-		gfx.DrawCircleFromCenter( timerCenterPos,timerInnerRadius,Colors::Black );
+		gfx.DrawCircle( timerCenterPos,timerOuterRadius,timerColor,CircleEffects::CircleFromCenter() );
+		gfx.DrawCircle( timerCenterPos,timerInnerRadius,Colors::Black,CircleEffects::CircleFromCenter() );
 	}
 	else
 	{
 		float up = float( twoPi / 4 );
 		float endAngle = float( ( brd->GetTimer() / Board::maxTimer ) * twoPi );
 		endAngle = endAngle < up ? up - endAngle : (float) twoPi - ( endAngle - up );
-		gfx.DrawCircleFromCenter( timerCenterPos,timerOuterRadius,timerColor,endAngle,float( twoPi / 4 ) );
-		gfx.DrawCircleFromCenter( timerCenterPos,timerInnerRadius,Colors::Black,endAngle,float( twoPi / 4 ) );
+		gfx.DrawCircle( timerCenterPos,timerOuterRadius,timerColor,CircleEffects::SectorFromCenter( endAngle,float( twoPi / 4 ) ) );
+		gfx.DrawCircle( timerCenterPos,timerInnerRadius,Colors::Black,CircleEffects::SectorFromCenter( endAngle,float( twoPi / 4 ) ) );
 	}
 }

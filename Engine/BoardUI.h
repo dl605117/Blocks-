@@ -1,6 +1,7 @@
 #pragma once
 #include "Board.h"
 #include "SpriteEffects.h"
+#include "CircleEffects.h"
 #include "Graphics.h"
 
 class BoardUI

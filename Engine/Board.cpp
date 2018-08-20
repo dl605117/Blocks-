@@ -31,6 +31,17 @@ Board& Board::operator=( const Board brd )
 	return *this;
 }
 
+void Board::InitBoard()
+{
+	std::uniform_int_distribution<int> colorDist( 0,2 );
+	viewBlock = std::make_unique<Block>(
+		RectF( Vec2( Graphics::ScreenWidth - blockWidth - 40.0f,
+			( Graphics::ScreenHeight + 500.0f - blockHeight ) / 2 ),
+			blockWidth,blockHeight ),
+		blockColors[colorDist( rng )] );
+	SpawnBlock();
+}
+
 void Board::PushColumn( Column col )
 {
 	assert( !IsOver() );
@@ -46,11 +57,14 @@ void Board::SpawnBlock()
 {
 	timer = 0.0f;
 	std::uniform_int_distribution<int> colorDist( 0,2 );
-	choiceBlock = std::make_unique<Block>(
-		RectF( Vec2( Graphics::ScreenWidth - blockWidth,
-			Graphics::ScreenHeight + 500.0f - blockHeight ) / 2,
-			blockWidth,blockHeight),
-			blockColors[colorDist( rng ) ] );
+	choiceBlock = std::move( viewBlock );
+	choiceBlock->SetLoc( Vec2( Graphics::ScreenWidth - blockWidth,
+		Graphics::ScreenHeight + 500.0f - blockHeight ) / 2 );
+	viewBlock = std::make_unique<Block>(
+		RectF( Vec2( Graphics::ScreenWidth - blockWidth - 40.0f,
+		( Graphics::ScreenHeight + 500.0f - blockHeight ) / 2 ),
+			blockWidth,blockHeight ),
+		blockColors[colorDist( rng )] );
 }
 
 void Board::Draw( Graphics& gfx ) const
@@ -58,6 +72,7 @@ void Board::Draw( Graphics& gfx ) const
 	if( choiceBlock != nullptr )
 	{
 		choiceBlock->Draw( gfx );
+		viewBlock->Draw( gfx );
 	}
 	for( std::vector<Block> col : field )
 	{
@@ -70,10 +85,6 @@ void Board::Draw( Graphics& gfx ) const
 
 bool Board::IsOver() const
 {
-	if( timer > maxTimer )
-	{
-		return true;
-	}
 	for( std::vector<Block> col : field )
 	{
 		if( col.size() >= maxRows )
@@ -101,9 +112,19 @@ void Board::UpdateAnimation( float dt )
 			break;
 		}
 	}
-	else if ( !IsOver() )
+}
+
+void Board::UpdateTimer( float dt )
+{
+	if( !IsOver() && !IsAnimating() )
 	{
 		timer += dt;
+	}
+	if( timer > maxTimer )
+	{
+		timer = 0;
+		std::uniform_int_distribution<int> colDist(0,2);
+		PushColumn( Column( colDist( rng ) ) );
 	}
 }
 

@@ -19,3 +19,13 @@ void Block::LinearShift( const Vec2& delta_loc )
 	block.top += delta_loc.y;
 	block.bottom += delta_loc.y;
 }
+
+void Block::SetLoc( const Vec2& new_loc )
+{
+	const float width = block.GetWidth();
+	const float height = block.GetHeight();
+	block.left = new_loc.x;
+	block.top = new_loc.y;
+	block.right = block.left + width;
+	block.bottom = block.top + height;
+}

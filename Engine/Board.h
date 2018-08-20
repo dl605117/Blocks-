@@ -31,11 +31,13 @@ public:
 	Board( const Board& brd );
 	~Board();
 	Board& operator=( const Board brd );
+	void InitBoard();
 	void PushColumn( Column col );
 	void SpawnBlock();
 	void Draw( Graphics& gfx ) const;
 	bool IsOver() const;
 	void UpdateAnimation( float dt );
+	void UpdateTimer( float dt );
 	void UpdateBlocks();
 	bool IsAnimating() const;
 	int GetScore() const;
@@ -61,6 +63,7 @@ private:
 	static constexpr float animationEraseTimer = 0.5f;
 	std::vector<Block> field[nColumns];
 	std::unique_ptr<Block> choiceBlock;
+	std::unique_ptr<Block> viewBlock;
 	Animations animation = Animations::NotAnimating;
 	float currentDisplacement = 0.0f;
 	Column currentColPush = Column::Left;
