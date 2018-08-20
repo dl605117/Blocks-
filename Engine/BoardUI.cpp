@@ -32,17 +32,9 @@ RectI BoardUI::GetNumberRect( char digit ) const
 
 void BoardUI::DrawTimer( Graphics& gfx ) const
 {
-	if( brd->IsOver() )
-	{
-		gfx.DrawCircle( timerCenterPos,timerOuterRadius,timerColor,CircleEffects::CircleFromCenter() );
-		gfx.DrawCircle( timerCenterPos,timerInnerRadius,Colors::Black,CircleEffects::CircleFromCenter() );
-	}
-	else
-	{
-		float up = float( twoPi / 4 );
-		float endAngle = float( ( brd->GetTimer() / Board::maxTimer ) * twoPi );
-		endAngle = endAngle < up ? up - endAngle : (float) twoPi - ( endAngle - up );
-		gfx.DrawCircle( timerCenterPos,timerOuterRadius,timerColor,CircleEffects::SectorFromCenter( endAngle,float( twoPi / 4 ) ) );
-		gfx.DrawCircle( timerCenterPos,timerInnerRadius,Colors::Black,CircleEffects::SectorFromCenter( endAngle,float( twoPi / 4 ) ) );
-	}
+	float up = float( twoPi / 4 );
+	float endAngle = float( ( brd->GetTimer() / Board::maxTimer ) * twoPi );
+	endAngle = endAngle < up ? up - endAngle : (float) twoPi - ( endAngle - up );
+	gfx.DrawCircle( timerCenterPos,timerOuterRadius,timerColor,CircleEffects::SectorFromCenter( endAngle,float( twoPi / 4 ) ) );
+	gfx.DrawCircle( timerCenterPos,timerInnerRadius,Colors::Black,CircleEffects::SectorFromCenter( endAngle,float( twoPi / 4 ) ) );
 }

@@ -109,14 +109,22 @@ public:
 	// Goes counterclockwise and 0.0f begins from ( 1,0 ) in the 
 	// coord system. Utilizes Radians
 	template <typename E>
-	void DrawCircle( const Vei2& center,int radius,Color c,E effect )
+	void DrawCircle( const Vei2& pos,int radius,Color c,E effect )
 	{
+		Vei2 new_pos( pos );
+		if ( typeid( E ) != typeid( CircleEffects::SectorFromCenter ) 
+			&& typeid( E ) != typeid( CircleEffects::CircleFromCenter ) 
+			&& typeid( E ) != typeid( CircleEffects::RingFromCenter ) 
+			&& typeid( E ) != typeid( CircleEffects::RingSectorFromCenter ) )
+		{
+			new_pos = Vei2( pos + Vei2( radius,radius ) );
+		}
 		const int radiusSq = radius * radius;
 		for( int dy = -radius; dy < radius; dy++ )
 		{
 			for( int dx = -radius; dx < radius; dx++ )
 			{
-				effect( center,dx,dy,radiusSq,c,*this );
+				effect( new_pos,dx,dy,radiusSq,c,*this );
 			}
 		}
 	}

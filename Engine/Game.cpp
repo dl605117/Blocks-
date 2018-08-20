@@ -68,8 +68,11 @@ void Game::UpdateModel()
 			}
 		}
 	}
-	brd.UpdateAnimation( dt );
-	brd.UpdateTimer( dt );
+	if( gameOn )
+	{
+		brd.UpdateAnimation( dt );
+		brd.UpdateTimer( dt );
+	}
 }
 
 void Game::ComposeFrame()
