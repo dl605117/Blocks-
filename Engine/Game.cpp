@@ -48,17 +48,25 @@ void Game::UpdateModel()
 		{
 			if( gameOn )
 			{
-				if( e.GetCode() == VK_LEFT )
+				if( e.GetCode() == 'Q' )
 				{
-					brd.PushColumn( Board::Column::Left );
+					brd.PushColumn( 0 );
 				}
-				else if( e.GetCode() == VK_UP )
+				else if( e.GetCode() == 'W' )
 				{
-					brd.PushColumn( Board::Column::Middle );
+					brd.PushColumn( 1 );
 				}
-				else if( e.GetCode() == VK_RIGHT )
+				else if( e.GetCode() == 'E' )
 				{
-					brd.PushColumn( Board::Column::Right );
+					brd.PushColumn( 2 );
+				}
+				else if( e.GetCode() == 'R' )
+				{
+					brd.PushColumn( 3 );
+				}
+				else if( e.GetCode() == 'T' )
+				{
+					brd.PushColumn( 4 );
 				}
 			}
 			else if ( e.GetCode() == VK_RETURN )

@@ -12,13 +12,6 @@
 class Board
 {
 public:
-	enum class Column
-	{
-		Left,
-		Middle,
-		Right
-	};
-public:
 	enum class Animations
 	{
 		NotAnimating,
@@ -32,7 +25,7 @@ public:
 	~Board();
 	Board& operator=( const Board brd );
 	void InitBoard();
-	void PushColumn( Column col );
+	void PushColumn( int col );
 	void SpawnBlock();
 	void Draw( Graphics& gfx ) const;
 	bool IsOver() const;
@@ -56,7 +49,7 @@ private:
 		Colors::Blue
 	};
 	static constexpr int maxRows = 7;
-	static constexpr int nColumns = 3;
+	static constexpr int nColumns = 5;
 	static constexpr int blockWidth = 70;
 	static constexpr int blockHeight = 30;
 	static constexpr int animationSpeed = 600;
@@ -66,7 +59,7 @@ private:
 	std::unique_ptr<Block> viewBlock;
 	Animations animation = Animations::NotAnimating;
 	float currentDisplacement = 0.0f;
-	Column currentColPush = Column::Left;
+	int currentColPush;
 	std::vector<int> rowsToDelete;
 	int score = 0;
 	int* pPointSystem = new int[5]{

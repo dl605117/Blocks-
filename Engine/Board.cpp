@@ -42,12 +42,12 @@ void Board::InitBoard()
 	SpawnBlock();
 }
 
-void Board::PushColumn( Column col )
+void Board::PushColumn( int col )
 {
 	assert( !IsOver() );
 	assert( choiceBlock != nullptr );
-	choiceBlock->LinearShift( Vec2( 100.0f * ( (int) col - 1 ),0.0f ) );
-	field[(int) col].push_back( *choiceBlock );
+	choiceBlock->LinearShift( Vec2( 100.0f * ( col - nColumns / 2 ),0.0f ) );
+	field[col].push_back( *choiceBlock );
 	choiceBlock = nullptr;
 	currentColPush = col;
 	animation = Animations::PushColumn;
@@ -123,26 +123,30 @@ void Board::UpdateTimer( float dt )
 	if( timer > maxTimer )
 	{
 		timer = 0;
-		std::uniform_int_distribution<int> colDist(0,2);
-		PushColumn( Column( colDist( rng ) ) );
+		std::uniform_int_distribution<int> colDist(0,nColumns - 1);
+		PushColumn( colDist( rng ) );
 	}
 }
 
 void Board::UpdateBlocks()
 {
-	int minRight = std::min(
-		int( field[(int) Column::Right].size() ),
-		int( field[(int) Column::Middle].size() ) );
-	int minRows = std::min(
-		int( field[(int) Column::Left].size() ),minRight );
+	int minRows = int(field[0].size());
+	for( std::vector<Block> col : field )
+	{
+		minRows = std::min( minRows,(int)col.size() );
+	}
 
 	bool collapsedBlocks = false;
 	int nCollapsedBlocks = 0;
 	for( int row = 1; row < minRows + 1; row++ )
 	{
-		const Color matchColor = field[(int) Column::Left][field[0].size() - row].color;
-		if( field[(int) Column::Middle][field[1].size() - row].color == matchColor
-			&& field[(int) Column::Right][field[2].size() - row].color == matchColor )
+		const Color colorMatch = field[0][field[0].size() - row].color;
+		bool rowColorMatched = true;
+		for( std::vector<Block> col : field )
+		{
+			rowColorMatched &= col[(int) col.size() - row].color == colorMatch;
+		}
+		if( rowColorMatched )
 		{
 			rowsToDelete.emplace_back( row );
 			animation = Animations::EraseRow;
