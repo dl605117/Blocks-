@@ -50,4 +50,28 @@ public:
 		Color chroma;
 		Color substitute;
 	};
+
+	class Ghost
+	{
+	public:
+		Ghost( Color chroma )
+			:
+			chroma( chroma )
+		{
+		}
+		void operator()( Color c,int x,int y,Graphics& gfx )
+		{
+			if( c != chroma )
+			{
+				const Color backgroundColor = gfx.GetPixel( x,y );
+				const Color mixed = Color(
+					( backgroundColor.GetR() + c.GetR() ) / 2,
+					( backgroundColor.GetG() + c.GetG() ) / 2,
+					( backgroundColor.GetB() + c.GetB() ) / 2
+				);
+				gfx.PutPixel( x,y,mixed );
+			}
+		}
+		Color chroma;
+	};
 };

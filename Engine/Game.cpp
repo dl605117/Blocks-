@@ -90,7 +90,7 @@ void Game::ComposeFrame()
 		brd.Draw( gfx );
 		if( brd.IsOver() )
 		{
-			gfx.DrawRect( RectI( 100,100,100,100 ),Colors::Magenta );
+			gfx.DrawRect( RectI( 100,100,200,200 ),Colors::Magenta );
 		}
 		brdUI.Draw( gfx );
 	}
