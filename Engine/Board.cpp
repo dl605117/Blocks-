@@ -3,7 +3,11 @@
 
 Board::Board()
 	:
-	rng( std::random_device()() )
+	rng( std::random_device()() ),
+	choiceBlockPos( Vec2( Graphics::ScreenWidth - blockWidth,
+		Graphics::ScreenHeight + 500.0f - blockHeight ) / 2 ),
+	viewBlockPos( Vec2( Graphics::ScreenWidth - blockWidth - 40.0f,
+	( Graphics::ScreenHeight + 500.0f - blockHeight ) / 2 ) )
 {
 }
 
@@ -35,8 +39,7 @@ void Board::InitBoard()
 {
 	std::uniform_int_distribution<int> colorDist( 0,2 );
 	viewBlock = std::make_unique<Block>(
-		RectF( Vec2( Graphics::ScreenWidth - blockWidth - 40.0f,
-			( Graphics::ScreenHeight + 500.0f - blockHeight ) / 2 ),
+		RectF( viewBlockPos,
 			blockWidth,blockHeight ),
 		blockColors[colorDist( rng )] );
 	SpawnBlock();
@@ -46,7 +49,7 @@ void Board::PushColumn( int col )
 {
 	assert( !IsOver() );
 	assert( choiceBlock != nullptr );
-	choiceBlock->LinearShift( Vec2( 100.0f * ( col - nColumns / 2 ),0.0f ) );
+	choiceBlock->LinearShift( Vec2( blockWidthDisplacement * ( col - nColumns / 2 ),0.0f ) );
 	field[col].push_back( *choiceBlock );
 	choiceBlock = nullptr;
 	currentColPush = col;
@@ -55,16 +58,17 @@ void Board::PushColumn( int col )
 
 void Board::SpawnBlock()
 {
-	timer = 0.0f;
-	std::uniform_int_distribution<int> colorDist( 0,2 );
-	choiceBlock = std::move( viewBlock );
-	choiceBlock->SetLoc( Vec2( Graphics::ScreenWidth - blockWidth,
-		Graphics::ScreenHeight + 500.0f - blockHeight ) / 2 );
-	viewBlock = std::make_unique<Block>(
-		RectF( Vec2( Graphics::ScreenWidth - blockWidth - 40.0f,
-		( Graphics::ScreenHeight + 500.0f - blockHeight ) / 2 ),
-			blockWidth,blockHeight ),
-		blockColors[colorDist( rng )] );
+	if( !IsOver() )
+	{
+		timer = 0.0f;
+		std::uniform_int_distribution<int> colorDist( 0,2 );
+		choiceBlock = std::move( viewBlock );
+		choiceBlock->SetLoc( choiceBlockPos );
+		viewBlock = std::make_unique<Block>(
+			RectF( viewBlockPos,
+				blockWidth,blockHeight ),
+			blockColors[colorDist( rng )] );
+	}
 }
 
 void Board::Draw( Graphics& gfx ) const
@@ -136,7 +140,6 @@ void Board::UpdateBlocks()
 		minRows = std::min( minRows,(int)col.size() );
 	}
 
-	bool collapsedBlocks = false;
 	int nCollapsedBlocks = 0;
 	for( int row = 1; row < minRows + 1; row++ )
 	{
@@ -150,11 +153,10 @@ void Board::UpdateBlocks()
 		{
 			rowsToDelete.emplace_back( row );
 			animation = Animations::EraseRow;
-			collapsedBlocks = true;
 			nCollapsedBlocks++;
 		}
 	}
-	if( !collapsedBlocks )
+	if( animation != Animations::EraseRow )
 	{
 		SpawnBlock();
 	}
@@ -169,7 +171,7 @@ bool Board::IsAnimating() const
 void Board::PushAnimation( float dt )
 {
 	assert( animation == Animations::PushColumn );
-	if( currentDisplacement >= 50.0f )
+	if( currentDisplacement >= blockHeightDisplacement )
 	{
 		animation = Animations::NotAnimating;
 		currentDisplacement = 0.0f;
@@ -179,9 +181,9 @@ void Board::PushAnimation( float dt )
 	{
 		auto movement = Vec2( 0.0f,-1.0f ) * animationSpeed * dt;
 		const auto movementY = std::abs( movement.y );
-		if( currentDisplacement + movementY > 50.0f )
+		if( currentDisplacement + movementY > blockHeightDisplacement )
 		{
-			movement = Vec2( 0.0f, currentDisplacement - 50.0f );
+			movement = Vec2( 0.0f, currentDisplacement - blockHeightDisplacement );
 		}
 		currentDisplacement += movementY;
 		for( Block& block : field[(int) currentColPush] )
@@ -194,7 +196,7 @@ void Board::PushAnimation( float dt )
 void Board::CollapseAnimation( float dt )
 {
 	assert( animation == Animations::CollapseRow );
-	if( currentDisplacement >= 50.0f )
+	if( currentDisplacement >= blockHeightDisplacement )
 	{
 		animation = Animations::NotAnimating;
 		currentDisplacement = 0.0f;
@@ -205,9 +207,9 @@ void Board::CollapseAnimation( float dt )
 	{
 		auto movement = Vec2( 0.0f,1.0f ) * animationSpeed * dt;
 		const auto movementY = std::abs( movement.y );
-		if( currentDisplacement + movementY > 50.0f )
+		if( currentDisplacement + movementY > blockHeightDisplacement )
 		{
-			movement = Vec2( 0.0f,50.0f - currentDisplacement );
+			movement = Vec2( 0.0f,blockHeightDisplacement - currentDisplacement );
 		}
 		currentDisplacement += movementY;
 		for( std::vector<Block>& col : field )
@@ -276,4 +278,19 @@ int Board::GetScore() const
 float Board::GetTimer() const
 {
 	return timer;
+}
+
+int Board::GetHeight() const
+{
+	return int( maxRows * ( blockHeight + blockHeightPadding ) + blockHeight );
+}
+int Board::GetWidth() const
+{
+	return int( ( nColumns - 1 ) * ( blockWidth + blockWidthPadding ) + blockWidth );
+}
+
+Vei2 Board::GetPos() const
+{
+	return Vei2( int( choiceBlockPos.x + ( blockWidth - GetWidth() ) / 2 ),
+		int( choiceBlockPos.y + blockHeight - GetHeight() ) );
 }

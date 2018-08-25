@@ -35,6 +35,9 @@ public:
 	bool IsAnimating() const;
 	int GetScore() const;
 	float GetTimer() const;
+	int GetHeight() const;
+	int GetWidth() const;
+	Vei2 GetPos() const;
 private:
 	void PushAnimation( float dt );
 	void CollapseAnimation( float dt );
@@ -48,12 +51,18 @@ private:
 		Colors::Green,
 		Colors::Blue
 	};
-	static constexpr int maxRows = 7;
-	static constexpr int nColumns = 5;
+	static constexpr int maxRows = 9;
+	static constexpr int nColumns = 3;
 	static constexpr int blockWidth = 70;
 	static constexpr int blockHeight = 30;
 	static constexpr int animationSpeed = 600;
 	static constexpr float animationEraseTimer = 0.5f;
+	static constexpr float blockHeightPadding = 20.0f;
+	static constexpr float blockHeightDisplacement = blockHeightPadding + blockHeight;
+	static constexpr float blockWidthPadding = 30.0f;
+	static constexpr float blockWidthDisplacement = blockWidthPadding + blockWidth;
+	Vec2 choiceBlockPos;
+	Vec2 viewBlockPos;
 	std::vector<Block> field[nColumns];
 	std::unique_ptr<Block> choiceBlock;
 	std::unique_ptr<Block> viewBlock;

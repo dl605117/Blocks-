@@ -14,7 +14,7 @@ public:
 	}
 	Vec2_ operator+( const Vec2_& rhs ) const
 	{
-		return Vec2_( rhs.x + x,rhs.y + rhs.y );
+		return Vec2_( rhs.x + x,rhs.y + y );
 	}
 	Vec2_& operator+=( const Vec2_& rhs )
 	{

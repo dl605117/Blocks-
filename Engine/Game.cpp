@@ -62,11 +62,11 @@ void Game::UpdateModel()
 				}
 				else if( e.GetCode() == 'R' )
 				{
-					brd.PushColumn( 3 );
+					//brd.PushColumn( 3 );
 				}
 				else if( e.GetCode() == 'T' )
 				{
-					brd.PushColumn( 4 );
+					//brd.PushColumn( 4 );
 				}
 			}
 			else if ( e.GetCode() == VK_RETURN )
@@ -90,7 +90,7 @@ void Game::ComposeFrame()
 		brd.Draw( gfx );
 		if( brd.IsOver() )
 		{
-			gfx.DrawRect( RectI( 100,100,200,200 ),Colors::Magenta );
+			gfx.DrawRect( RectI( 300,300,350,350 ),Colors::Gray );
 		}
 		brdUI.Draw( gfx );
 	}
