@@ -26,7 +26,8 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	brdUI( brd,"Images\\text16x28.bmp" )
+	brdUI( brd,"Images\\text16x28.bmp" ),
+	gameOverTitle( "Images\\dib.bmp" )
 {
 }
 
@@ -41,7 +42,11 @@ void Game::Go()
 void Game::UpdateModel()
 {
 	const float dt = ft.Mark();
-	while( !wnd.kbd.KeyIsEmpty() && !brd.IsOver() && !brd.IsAnimating() )
+	if( brd.IsAnimating() )
+	{
+		wnd.kbd.Flush();
+	}
+	while( !wnd.kbd.KeyIsEmpty() && !brd.IsOver() )
 	{
 		const auto e = wnd.kbd.ReadKey();
 		if( e.IsRelease() )
@@ -69,7 +74,7 @@ void Game::UpdateModel()
 					//brd.PushColumn( 4 );
 				}
 			}
-			else if ( e.GetCode() == VK_RETURN )
+			else if( e.GetCode() == VK_RETURN )
 			{
 				brd.InitBoard();
 				gameOn = true;
@@ -90,7 +95,7 @@ void Game::ComposeFrame()
 		brd.Draw( gfx );
 		if( brd.IsOver() )
 		{
-			gfx.DrawRect( RectI( 300,300,350,350 ),Colors::Gray );
+			gfx.DrawSprite( 300,200,gameOverTitle,SpriteEffects::NoEffect() );
 		}
 		brdUI.Draw( gfx );
 	}

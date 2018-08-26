@@ -49,11 +49,11 @@ void Board::PushColumn( int col )
 {
 	assert( !IsOver() );
 	assert( choiceBlock != nullptr );
+	animation = Animations::PushColumn;
 	choiceBlock->LinearShift( Vec2( blockWidthDisplacement * ( col - nColumns / 2 ),0.0f ) );
 	field[col].push_back( *choiceBlock );
 	choiceBlock = nullptr;
 	currentColPush = col;
-	animation = Animations::PushColumn;
 }
 
 void Board::SpawnBlock()
@@ -173,9 +173,10 @@ void Board::PushAnimation( float dt )
 	assert( animation == Animations::PushColumn );
 	if( currentDisplacement >= blockHeightDisplacement )
 	{
-		animation = Animations::NotAnimating;
-		currentDisplacement = 0.0f;
 		UpdateBlocks();
+		animation = animation == Animations::PushColumn ? 
+			Animations::NotAnimating : animation;
+		currentDisplacement = 0.0f;
 	}
 	else
 	{
@@ -198,10 +199,10 @@ void Board::CollapseAnimation( float dt )
 	assert( animation == Animations::CollapseRow );
 	if( currentDisplacement >= blockHeightDisplacement )
 	{
-		animation = Animations::NotAnimating;
 		currentDisplacement = 0.0f;
 		SpawnBlock();
 		rowsToDelete.clear();
+		animation = Animations::NotAnimating;
 	}
 	else
 	{

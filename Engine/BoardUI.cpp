@@ -35,7 +35,7 @@ void BoardUI::DrawScore( Graphics& gfx ) const
 
 RectI BoardUI::GetNumberRect( char digit ) const
 {
-	Vei2 topLeft( ( digit - ' ' ) * 16,0 );
+	Vei2 topLeft( ( digit - ' ' ) * 16,3 );
 	return RectI( topLeft,topLeft + Vei2( 16,28 ) );
 }
 

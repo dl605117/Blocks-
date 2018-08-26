@@ -52,4 +52,5 @@ private:
 	BoardUI brdUI;
 	FrameTimer ft;
 	bool gameOn = false;
+	Surface gameOverTitle;
 };
